@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiftTogether - Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo"></div>    
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Usuario" required>
+            <input type="password" id="loginPassword" placeholder="Contraseña" required>
+            <button type="button" class="login-button" onclick="iniciarSesion()">Iniciar Sesión</button>
+        </form>
+        <div class="create-account">
+            <a href="crear_cuenta.html">Crear cuenta</a>
+        </div>
+    </div>
+
+    <script>
+        function iniciarSesion() {
+            const correo = document.getElementById('loginEmail').value.trim();
+            const contraseña = document.getElementById('loginPassword').value;
+    
+            if (!correo || !contraseña) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos vacíos',
+                    text: 'Por favor, completa todos los campos.'
+                });
+                return;
+            }
+    
+            fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo, contraseña }),
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('nombreUsuario', data.nombre);
+                    localStorage.setItem('tipoUsuario', data.tipo);
+                    localStorage.setItem('id', data.id);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Bienvenido',
+                        text: data.nombre,
+                        showConfirmButton: false,
+                        timer: 1000
+                    }).then(() => {
+                        if(data.tipo == 'cliente')
+                            window.location.href = 'inicio_cliente.html';
+                        else{
+                            window.location.href = 'inicio_vendedor.html';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de autenticación',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'No se pudo conectar con el servidor.'
+                });
+            });
+        }
+    </script>
+</body>
+</html>

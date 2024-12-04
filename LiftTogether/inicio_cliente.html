@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiftTogether - Inicio del Cliente</title>
+    <link rel="stylesheet" href="stylesHome.css">
+</head>
+<body>
+    <!-- Barra de navegación superior -->
+    <header class="navbar">
+        <a href="inicio_cliente.html" class="logo">LiftTogether.com</a>
+        <div class="search-bar">
+            <select id="categoriesDropdown">
+                <option value="">Todas las categorías</option>
+                <option value="electronica">Electrónica</option>
+                <option value="ropa">Ropa</option>
+                <option value="hogar">Hogar</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="Buscar productos">
+            <button onclick="buscarProducto()">🔍</button>
+        </div>
+        
+        <div class="user-options" id="userOptions">
+            <span>Hola <span id="userFirstName">Usuario</span></span>
+            <span>Cuenta</span>
+            <div id="accountMenu" class="account-menu">
+                <a href="mi_cuenta_Cliente.html">Mi cuenta</a>
+                <a href="mis_pedidos.html">Mis pedidos</a>
+                <a href="index.html" onclick="cerrarSesion()">Cerrar sesión</a>
+            </div>
+        </div>
+        <a href="carrito.html" class="cart-icon">🛒</a>
+    </header>
+
+    <!-- Barra de navegación inferior -->
+    <div class="sub-navbar">
+        <button id="sellButton">Vender</button>
+        <a href="ayuda.html">Ayuda</a>
+    </div>
+
+    <!-- Sección principal de contenido -->
+    <main>
+        <div class="banner">
+            <h1>Descubre tendencias y sonríele a la Moda</h1>
+            <p>Paga hasta 12 quincenas</p>
+        </div>
+        <div class="products-section">
+            <p>Aún no hay artículos en venta</p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userOptions = document.getElementById("userOptions");
+        const accountMenu = document.getElementById("accountMenu");
+
+        userOptions.addEventListener("mouseenter", function() {
+            accountMenu.style.display = "block";
+        });
+
+        userOptions.addEventListener("mouseleave", function() {
+            accountMenu.style.display = "none";
+        });
+
+        // Si deseas que el menú también se despliegue con un clic
+        userOptions.addEventListener("click", function() {
+            if (accountMenu.style.display === "none" || accountMenu.style.display === "") {
+                accountMenu.style.display = "block";
+            } else {
+                accountMenu.style.display = "none";
+            }
+        });
+            function buscarProducto() {
+                const searchInput = document.getElementById('searchInput').value.trim();
+                const category = document.getElementById('categoriesDropdown').value;
+                if (searchInput) {
+                    alert(`Buscando "${searchInput}" en categoría "${category || 'todas'}"...`);
+                }
+            }
+
+            function cerrarSesion() {
+                alert('Sesión cerrada');
+                window.location.href = 'index.html';
+            }
+
+            // Obtén solo el primer nombre del usuario
+            const fullName = "Usuario Ejemplo"; // Reemplaza con el valor dinámico
+            document.getElementById("userFirstName").textContent = fullName.split(" ")[0];
+
+            document.getElementById('sellButton').addEventListener('click', function() {
+                alert('Para vender, debes tener una cuenta como vendedor.');
+            });
+        });
+    </script>
+</body>
+</html>
